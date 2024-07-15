@@ -10,8 +10,7 @@ const port = 3000;
 
 // Webhook Print
 app.get('/', (req, res) => {
-    console.log(req);
-    console.log(res);
+    console.log(req.data);
     res.send("Hello, World!");
 })
 
