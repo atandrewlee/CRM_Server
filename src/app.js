@@ -15,6 +15,12 @@ app.get('/', (req, res) => {
     res.send("Hello, World!");
 })
 
+app.post('/', (req, res) => {
+    console.log(req.data)
+    console.log(res.data)
+    res.status(200);
+    res.send("Post Request");
+})
 
 
 app.listen(port, () => {
