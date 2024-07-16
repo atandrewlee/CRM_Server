@@ -16,8 +16,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    console.log(req.data)
-    console.log(res.data)
+    console.log(req)
     res.status(200);
     res.send("Post Request");
 })
