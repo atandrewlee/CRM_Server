@@ -11,6 +11,7 @@ const port = 3000;
 // Webhook Print
 app.get('/', (req, res) => {
     console.log(req.data);
+    res.status(200);
     res.send("Hello, World!");
 })
 
