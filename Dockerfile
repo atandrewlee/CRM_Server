@@ -6,4 +6,4 @@ WORKDIR /opt/app
 COPY / .
 RUN npm install
 EXPOSE 3000
-CMD [ "npm", "run", "start-no-env" ]
+CMD [ "npm", "run", "start" ]

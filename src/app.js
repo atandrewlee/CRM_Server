@@ -1,5 +1,7 @@
 import cron from "node-cron";
 import express from "express";
+import bodyParser from "body-parser";
+import { createNewUser } from "./listener/listener.js";
 
 // cron.schedule('* * * * * *', () => {
 //     console.log('run task every second');
@@ -8,20 +10,11 @@ import express from "express";
 const app = express();
 const port = 3000;
 
-// Webhook Print
-app.get('/', (req, res) => {
-    console.log(req.data);
-    res.status(200);
-    res.send("Hello, World!");
-})
-
-app.post('/', (req, res) => {
-    console.log(req)
-    res.status(200);
-    res.send("Post Request");
-})
-
+app.post("/", 
+    bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
+    createNewUser)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
 });
+
