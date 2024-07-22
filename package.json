@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node --env-file=.env src/app.js",
+    "start-no-env": "node src/app.js",
     "test": "mocha ./src/tests/*.spec.js"
   },
   "author": "",

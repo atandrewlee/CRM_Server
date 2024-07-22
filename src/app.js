@@ -14,8 +14,6 @@ app.post("/",
     bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
     createNewUser)
 
-
-
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
 });
