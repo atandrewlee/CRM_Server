@@ -10,7 +10,7 @@ export function dropbox_create_file(title) {
             'Authorization': `Bearer ${process.env.DROPBOX_API}`,
             'Dropbox-API-Arg': JSON.stringify({
                 mode: "add",
-                path: `/ionia/crm/${title}`
+                path: `/ionia/crm/${title}.md`
             }), 
             'Content-Type': "application/octet-stream"
         }
