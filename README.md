@@ -16,6 +16,12 @@ This is a web server & job runner for my personal CRM.
 - DockerFile
 - .env file
 
+### What environment variables do you need?
+- DROPBOX_API=<dropbox-api key>
+- FILE_PATH=<file_path to my CRM files>
+
+
+
 ## How to test?
 
 
