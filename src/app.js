@@ -12,17 +12,18 @@ import { dropbox_auth, dropbox_gen_access_token } from "./dropbox_auth.js";
 const app = express();
 const port = 3000;
 const config = {
-    clientId: 'm6oyxerwdomtjv7',
-    clientSecret: 'g4drdaz6ahxtmbu'
+    clientId: process.env.DROPBOX_APP_KEY,
+    clientSecret: process.env.DROPBOX_APP_SECRET,
+    refreshToken: process.env.DROPBOX_REFRESH_TOKEN,
 };
 export const dbx = new Dropbox(config);
 
 app.post("/", 
     bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
-    await createNewUser)
+    createNewUser)
 
+// Authentication Path's
 app.get("/", dropbox_gen_access_token);
-
 app.get('/auth', dropbox_auth);
 
 app.listen(port, () => {
