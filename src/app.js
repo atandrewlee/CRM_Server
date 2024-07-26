@@ -17,7 +17,7 @@ const config = {
     clientSecret: 'g4drdaz6ahxtmbu'
 };
 export const dbx = new Dropbox(config);
-const redirectUri = `http://localhost:3000/auth`
+const redirectUri = `${process.env.HOST}/auth`
 
 app.post("/", 
     bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
