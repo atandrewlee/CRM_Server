@@ -6,5 +6,4 @@ export function dropbox_create_file(title) {
         console.log(response);
     }).catch((uploadErr) => {
         console.log(uploadErr);
-    }) 
-}
+    })
