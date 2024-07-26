@@ -3,7 +3,7 @@ const redirectUri = `${process.env.HOST}/auth`
 let accessCode = "";
 
 
-export function dropbox_auth(req, res) {
+export function dropbox_gen_access_token(req, res) {
     dbx.auth.getAuthenticationUrl(redirectUri, null, 'code', 'offline', null, 'none', false)
     .then((authUrl) => {
       accessCode = req.query;
@@ -12,7 +12,7 @@ export function dropbox_auth(req, res) {
     })
 }
 
-export function dropbox_access_token(req, res) {
+export function dropbox_auth(req, res) {
     const { code } = req.query;
     console.log(`code:${code}`);
   

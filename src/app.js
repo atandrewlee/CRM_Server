@@ -3,7 +3,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { createNewUser } from "./listener/listener.js";
 import { Dropbox } from "dropbox";
-import { dropbox_access_token, dropbox_auth } from "./dropbox_auth.js";
+import { dropbox_auth, dropbox_gen_access_token } from "./dropbox_auth.js";
 
 // cron.schedule('* * * * * *', () => {
 //     console.log('run task every second');
@@ -21,9 +21,9 @@ app.post("/",
     bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
     await createNewUser)
 
-app.get("/", dropbox_auth);
+app.get("/", dropbox_gen_access_token);
 
-app.get('/auth', dropbox_access_token);
+app.get('/auth', dropbox_auth);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
