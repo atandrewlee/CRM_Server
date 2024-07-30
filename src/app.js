@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import express from "express";
 import bodyParser from "body-parser";
-import { createNewUser } from "./listener/listener.js";
+import { createNewUserUpdate, createNewUserInsert } from "./listener/listener.js";
 import { Dropbox } from "dropbox";
 import { dropbox_auth, dropbox_gen_access_token } from "./dropbox_auth.js";
 
@@ -18,9 +18,14 @@ const config = {
 };
 export const dbx = new Dropbox(config);
 
+// Webhooks
 app.post("/", 
     bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
-    createNewUser)
+    createNewUserUpdate)
+app.post("/new",
+    bodyParser.json({inflate: true, strict: false, type: "application/json"}),
+    createNewUserInsert
+)
 
 // Authentication Path's
 app.get("/", dropbox_gen_access_token);
