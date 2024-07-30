@@ -12,5 +12,7 @@ export function createNewUserUpdate(req, res) {
 
 export function createNewUserInsert(req, res) {
     const row = req.body.data.rows[0]
-    res.send(dropbox_create_file(row.Name))
+    if (row.Name !== null) {
+        res.send(dropbox_create_file(row.Name))
+    }
 }
