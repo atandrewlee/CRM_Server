@@ -5,36 +5,20 @@ import { dbx } from "../app.js";
 import { Readable } from 'stream';
 import path from 'path';
 
-// Test File
-// const filePath = 'src/parser/test_markdown.md';
-
-/*
-# How to use?
-- FileStream needs a file that's local
-
-- Function
-  - Input >> What Dates
-  1. Gets the files from Dropbox (download)
-  2. Throws it into the parser
-  3. Deletes files once finished
-
-*/
-
-
-
-
-
-
 
 const URL =
   "http://noco.andrewleeofficial.com/api/v2/tables/m87s2ylc5jc3r34/records";
 const VIEW_ID = "vwe4ecbjvasdfbzj";
 const SECTION_TITLE = "Interactions";
 
-/**
+/** @constructor
+ * Parser for a Daily Note to check for when I last contacted people
  * 
- * File >> File Name & Path (w/ .md)
+ * @param {string} file - The whole filepath (from /../../../file.md)
  * 
+ * # How to use?
+ * 1. Create DailyNoteParser(file)
+ * 2. run parseDailyNote() 
  */
 class DailyNoteParser {
   constructor(file) {
@@ -113,30 +97,6 @@ class DailyNoteParser {
     });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -230,7 +190,6 @@ function findPersonExistsReturnId(name, list) {
 
 // Function to convert "" -> date
 
-
 /**
  *
  * @param {*} filePath
@@ -244,81 +203,3 @@ function dropbox_get_daily_note(filePath) {
           console.error(error);
       });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// rl.on('line', (line) => {
-//     console.log(`Line from file: ${line}`);
-// })
-
-// rl.on('close', () => {
-//     console.log('File reading completed.');
-// });
-
-/*
-Note on File Structure:
-- /
-    - /crm
-    - /plans/daily
-
-Note on Naming
-- CRM File Names: `First Last.md`
-
-
-
-
-*/
-/* What Other Work To Do
-- When link found in the daily note, parse the CRM
-- Function To Wrap Everything (given file)
-
-- Whole Function to do this for every file
-    - 
-
-
-
-- Automated call to a 
-
-*/
-//parseLine("[Oksana Sokolova](../../crm/Oksana%20Sokolova.md)");
-//await getAllNames();
-//updateLastContact(82, "2024-08-05");
-// console.log(findPersonExistsReturnID("Zach Zhang",[
-//     { Id: 1, Name: 'Tameem Hourani' },
-//     { Id: 2, Name: 'Sean Park' },
-//     { Id: 3, Name: 'Ethan Lee' },
-//     { Id: 4, Name: 'Louis Karipis' },
-//     { Id: 5, Name: 'Ajish George' },
-//     { Id: 6, Name: 'Evelyn Cooper' },
-//     { Id: 7, Name: 'Shefali Mukerji' },
-//     { Id: 8, Name: 'Jay Bhambhani' },
-//     { Id: 9, Name: 'Kyle Throsell' },
-//     { Id: 10, Name: 'Josh Linnett' },
-//     { Id: 11, Name: 'Nathan Sanders' },
-//     { Id: 22, Name: 'Alex Park' },
-//     { Id: 47, Name: 'Jean-Philippe Michel' },
-//     { Id: 48, Name: 'Connor Grant' },
-//     { Id: 50, Name: 'Jeongwon Cho' },
-//     { Id: 55, Name: 'Joe Little' },
-//     { Id: 61, Name: 'Jason Frishman' },
-//     { Id: 65, Name: 'Jill Neff' },
-//     { Id: 69, Name: 'John Fanning' },
-//     { Id: 71, Name: 'Caroline Wilkinson' },
-//     { Id: 82, Name: 'Zach Zhang' }
-//   ]))
-
-const obj = new DailyNoteParser('/ionia/plans/daily/2024-08-07.md')
-obj.parseDailyNote()
