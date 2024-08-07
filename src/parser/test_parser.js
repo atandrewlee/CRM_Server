@@ -1,98 +1,130 @@
 import * as fs from "node:fs";
 import * as readline from "node:readline";
 import axios from "axios";
+import { dbx } from "../app.js";
+import { Readable } from 'stream';
+import path from 'path';
 
 // Test File
 // const filePath = 'src/parser/test_markdown.md';
 
+/*
+# How to use?
+- FileStream needs a file that's local
+
+- Function
+  - Input >> What Dates
+  1. Gets the files from Dropbox (download)
+  2. Throws it into the parser
+  3. Deletes files once finished
+
+*/
+
+
+
+
+
+
+
 const URL =
   "http://noco.andrewleeofficial.com/api/v2/tables/m87s2ylc5jc3r34/records";
 const VIEW_ID = "vwe4ecbjvasdfbzj";
-const SECTION_TITLE = "People";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Global Variable To Check For State
-let inSection = false;
+const SECTION_TITLE = "Interactions";
 
 /**
- * Higher Order Function
- * Creates a line parser
  * 
- * @param {*} filePath 
- * @returns 
+ * File >> File Name & Path (w/ .md)
+ * 
  */
-function createLineParser(filePath) {
-  return function processLine(line) {
-    if (line.startsWith("# ")) {
-      // Markdown Heading 1
-      if (line.slice(2).trim() === SECTION_TITLE) {
-        // Enter People Heading 1
-        inSection = true;
-      } else {
-        // Left People Heading 1
-        inSection = false;
+class DailyNoteParser {
+  constructor(file) {
+    this.file = file;
+    this.inSection = false;
+  }
+  /**
+   * Top-Level Function to parse through a daily note
+   * 
+   * Looks only in the section for the CRM
+   * Looks through each line for links. If it finds any backlinks to people in the CRM, updates last-contacted
+   *  
+   * @param {*} filePath 
+   */
+  parseDailyNote() {
+    dropbox_get_daily_note(this.file).then(fileBinary => {
+      const binaryStream = new Readable();
+      binaryStream._read = () => {};
+      binaryStream.push(fileBinary)
+      const rl = readline.createInterface({
+        input: binaryStream,
+        crlfDelay: Infinity,
+      });
+    rl.on("line", this.createLineParser(this.file));
+  })
+}
+
+  /**
+   * Higher Order Function
+   * Creates a line parser
+   * The line parser only parses lines that are in the section
+   * 
+   * @param {*} filePath 
+   * @returns 
+   */
+  createLineParser(filePath) {
+    return (line) => {
+      if (line.startsWith("# ")) {
+        // Markdown Heading 1
+        if (line.slice(2).trim() === SECTION_TITLE) {
+          // Enter People Heading 1
+          this.inSection = true;
+        } else {
+          // Left People Heading 1
+          this.inSection = false;
+        }
       }
-    }
-    if (inSection) {
-      // In Section
-      const fileName = "";
-      parseLine(line, fileName);
-    }
-  };
+      if (this.inSection) {
+        // In Section
+        const fileName = path.basename(filePath)
+        this.parseLine(line, fileName);
+      }
+    };
+  }
+
+  parseLine(line, fileName) {
+    const links = findAllMarkdownLinks(line);
+    links.forEach(async (link) => {
+      let linkParts = getFilePathFromLink(link);
+      if (linkParts === null) {
+        return;
+      }
+      let linkName = linkParts[linkParts.length - 1];
+      let personName = decodeURIComponent(linkName).replace(".md", "");
+  
+      // COMMENT: Don't check the `/crm/...` yet because we don't have things standardized with links in Obsidian
+      //let linkPath = linkParts[linkParts.length - 2];
+      let listOfNames = await getAllNames();
+      const personId = findPersonExistsReturnId(personName, listOfNames)
+      if (personId !== null) {
+        // Add a Try/Catch
+        const date = fileName.replace(".md", ""); // TODO: Check the fileName
+        updateLastContact(personId, date)
+        return;
+      }
+    });
+  }
 }
 
-/**
- * Top-Level Function to parse through a daily note
- * 
- * Looks only in the section for the CRM
- * Looks through each line for links. If it finds any backlinks to people in the CRM, updates last-contacted
- *  
- * @param {*} filePath 
- */
-function parseDailyNote(filePath) {
-  const fileStream = fs.createReadStream(filePath);
-  const rl = readline.createInterface({
-    input: fileStream,
-    crlfDelay: Infinity,
-  });
-  rl.on("line", createLineParser(filePath));
-}
 
-function parseLine(line, fileName) {
-  const links = findAllMarkdownLinks(line);
-  links.forEach(async (link) => {
-    let linkParts = getFilePathFromLink(link);
-    if (linkParts === null) {
-      return;
-    }
-    let linkName = linkParts[linkParts.length - 1];
-    let personName = decodeURIComponent(linkName).replace(".md", "");
 
-    // COMMENT: Don't check the `/crm/...` yet because we don't have things standardized with links in Obsidian
-    //let linkPath = linkParts[linkParts.length - 2];
-    let listOfNames = await getAllNames();
-    const personId = findPersonExistsReturnId(personName, listOfNames)
-    if (personId !== null) {
-      // Add a Try/Catch
-      const date = "" //TODO: Change Filename -> Date
-      updateLastContact(personId, date)
-    }
-  });
-}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -129,7 +161,6 @@ function getAllNames() {
     axios
       .request(options)
       .then(function (response) {
-        console.log(response.data);
         response.data.list.forEach((row) => {
           listNames.push(row);
         });
@@ -189,7 +220,7 @@ function updateLastContact(id, date) {
   });
 }
 
-function findPersonExistsReturnID(name, list) {
+function findPersonExistsReturnId(name, list) {
   const person = list.find((person) => person.Name === name)
   return person ? person.Id : null;
 }
@@ -200,6 +231,19 @@ function findPersonExistsReturnID(name, list) {
 // Function to convert "" -> date
 
 
+/**
+ *
+ * @param {*} filePath
+ *
+ * @return Promise which contains the FileBinary
+ */
+function dropbox_get_daily_note(filePath) {
+  return dbx.filesDownload({ path: filePath })
+      .then(response => response.result.fileBinary)
+      .catch(error => {
+          console.error(error);
+      });
+}
 
 
 
@@ -275,3 +319,6 @@ Note on Naming
 //     { Id: 71, Name: 'Caroline Wilkinson' },
 //     { Id: 82, Name: 'Zach Zhang' }
 //   ]))
+
+const obj = new DailyNoteParser('/ionia/plans/daily/2024-08-07.md')
+obj.parseDailyNote()
