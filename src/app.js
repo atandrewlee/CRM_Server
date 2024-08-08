@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import { createNewUser } from "./listener/createFileFromNewPerson.js";
 import { Dropbox } from "dropbox";
 import { dropbox_auth, dropbox_gen_access_token } from "./util/dropbox_auth.js";
-import { databaseToFileCRMYAML } from "./yaml/update-yaml.js";
+import { databaseToFileCRMYAML } from "./listener/update-yaml.js";
 // cron.schedule('* * * * * *', () => {
 //     console.log('run task every second');
 // })
@@ -24,6 +24,7 @@ app.post("/create-user", bodyParser.json({inflate: true, strict: false, type: "a
 app.post("/crm-yaml", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
     databaseToFileCRMYAML
 )
+
 
 
 // Authentication Path's
