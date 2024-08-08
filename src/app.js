@@ -19,7 +19,7 @@ const config = {
 export const dbx = new Dropbox(config);
 
 // Webhook Routes
-app.post("/", bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
+app.post("/create-user", bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
     createNewUser)
 app.post("/crm-yaml", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
     databaseToFileCRMYAML

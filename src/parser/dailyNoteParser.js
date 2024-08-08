@@ -1,15 +1,16 @@
-import * as fs from "node:fs";
+/*
+Parses Daily Note To Update Last-Contacted
+
+*/
 import * as readline from "node:readline";
 import axios from "axios";
 import { Readable } from 'stream';
 import path from 'path';
 import { dropboxGetFile } from "../util/dropbox.js";
+import { URL , VIEW_ID, SECTION_TITLE} from "../util/constants.js";
 
 
-const URL =
-  "http://noco.andrewleeofficial.com/api/v2/tables/m87s2ylc5jc3r34/records";
-const VIEW_ID = "vwe4ecbjvasdfbzj";
-const SECTION_TITLE = "Interactions";
+
 
 /** @constructor
  * Parser for a Daily Note to check for when I last contacted people
@@ -25,6 +26,7 @@ class DailyNoteParser {
     this.file = file;
     this.inSection = false;
   }
+
   /**
    * Top-Level Function to parse through a daily note
    * 
@@ -74,6 +76,11 @@ class DailyNoteParser {
     };
   }
 
+  /**
+   * 
+   * @param {*} line 
+   * @param {*} fileName 
+   */
   parseLine(line, fileName) {
     const links = findAllMarkdownLinks(line);
     links.forEach(async (link) => {
@@ -167,7 +174,7 @@ function updateLastContact(id, date) {
       }, 
       data: {
         "Id": id,
-        "Last Contact": date,
+        "Last_Contact": date,
       },
     };
     axios.request(options).then(function (response) {
