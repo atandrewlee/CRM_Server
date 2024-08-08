@@ -1,9 +1,9 @@
 import * as fs from "node:fs";
 import * as readline from "node:readline";
 import axios from "axios";
-import { dbx } from "../app.js";
 import { Readable } from 'stream';
 import path from 'path';
+import { dropboxGetFile } from "../util/dropbox.js";
 
 
 const URL =
@@ -34,7 +34,7 @@ class DailyNoteParser {
    * @param {*} filePath 
    */
   parseDailyNote() {
-    dropbox_get_daily_note(this.file).then(fileBinary => {
+    dropboxGetFile(this.file).then(fileBinary => {
       const binaryStream = new Readable();
       binaryStream._read = () => {};
       binaryStream.push(fileBinary)
@@ -190,16 +190,3 @@ function findPersonExistsReturnId(name, list) {
 
 // Function to convert "" -> date
 
-/**
- *
- * @param {*} filePath
- *
- * @return Promise which contains the FileBinary
- */
-function dropbox_get_daily_note(filePath) {
-  return dbx.filesDownload({ path: filePath })
-      .then(response => response.result.fileBinary)
-      .catch(error => {
-          console.error(error);
-      });
-}

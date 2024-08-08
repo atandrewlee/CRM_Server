@@ -1,28 +1,3 @@
-import yaml from 'js-yaml';
-
-const str = `Tier: "t1"
-Last-Contact: "2024-08-07"`
-
-const params = {
-    name: "John Doe",
-    age: 30,
-    job: "Developer",
-    skills: ["JavaScript", "Node.js", "React"],
-    address: {
-      street: "123 Main St",
-      city: "Hometown",
-      zip: "12345"
-    }
-  };
-
-const doc = yaml.load(str)
-
-
-const yamlStr = yaml.dump(params)
-console.log(yamlStr)
-
-
-
 // const jsonObject = {
 //     "Id": 3,
 //     "Name": "Ethan Lee",

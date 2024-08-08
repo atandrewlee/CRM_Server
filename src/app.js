@@ -3,8 +3,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import { createNewUser } from "./listener/listener.js";
 import { Dropbox } from "dropbox";
-import { dropbox_auth, dropbox_gen_access_token } from "./dropbox_auth.js";
-
+import { dropbox_auth, dropbox_gen_access_token } from "./util/dropbox_auth.js";
+import { databaseToFileCRMYAML } from "./yaml/update-yaml.js";
 // cron.schedule('* * * * * *', () => {
 //     console.log('run task every second');
 // })
@@ -18,9 +18,15 @@ const config = {
 };
 export const dbx = new Dropbox(config);
 
-app.post("/", 
-    bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
+// Webhook Routes
+app.post("/", bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
     createNewUser)
+app.post("/crm-yaml", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
+    databaseToFileCRMYAML
+)
+
+
+
 
 // Authentication Path's
 app.get("/", dropbox_gen_access_token);
