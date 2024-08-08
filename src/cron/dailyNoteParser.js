@@ -7,7 +7,6 @@ import axios from "axios";
 import { Readable } from 'stream';
 import path from 'path';
 import { dropboxGetFile } from "../util/dropbox.js";
-import { URL , VIEW_ID, SECTION_TITLE} from "../util/constants.js";
 
 
 
@@ -60,7 +59,7 @@ class DailyNoteParser {
     return (line) => {
       if (line.startsWith("# ")) {
         // Markdown Heading 1
-        if (line.slice(2).trim() === SECTION_TITLE) {
+        if (line.slice(2).trim() === process.env.CRM_SECTION_TITLE) {
           // Enter People Heading 1
           this.inSection = true;
         } else {
@@ -118,8 +117,8 @@ function getAllNames() {
     let listNames = [];
     var options = {
       method: "GET",
-      url: URL,
-      params: { offset: "0", fields: "Id,Name", viewId: VIEW_ID },
+      url: process.env.NOCO_URL +process.env.NOCO_URL_API + process.env.NOCO_TABLE_ID + "/records",
+      params: { offset: "0", fields: "Id,Name", viewId: process.env.NOCO_VIEW_ID },
       headers: {
         "xc-token": process.env.NOCO_API,
       },
@@ -167,8 +166,8 @@ function updateLastContact(id, date) {
   return new Promise((resolve, reject) => {
     var options = {
       method: "PATCH",
-      url: URL,
-      params: { offset: "0", fields: "Id,Name", viewId: VIEW_ID },
+      url: process.env.NOCO_URL + process.env.NOCO_URL_API + process.env.NOCO_TABLE_ID + "/records",
+      params: { offset: "0", fields: "Id,Name", viewId: process.env.NOCO_VIEW_ID },
       headers: {
         "xc-token": process.env.NOCO_API,
       }, 
