@@ -4,6 +4,7 @@ import { dropboxGetFile, dropboxUploadFile } from "../util/dropbox.js";
 
 
 const LIST_FIELDS = ['interests', 'relationship']
+const DELETE_FIELDS = ['CreatedAt', 'UpdatedAt', 'Company', 'Markdown_File']
 
 export function databaseToFileCRMYAML(req, res) {
     const items = req.body.data.rows[0]
@@ -20,6 +21,11 @@ async function updateYAMLInFile(row) {
     try {
       const fileBinary = await dropboxGetFile(filePath);
       const fileString = fileBinary.toString('utf8');
+      // Delete Unnecessary Fields
+      DELETE_FIELDS.forEach((item, index) => {
+        delete row[item];
+      })
+
       // Convert All comma-separated lists into actual lists
       LIST_FIELDS.forEach((item, index) => {
         const str = row[item];
