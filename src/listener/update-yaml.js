@@ -2,7 +2,7 @@ import yaml from 'js-yaml';
 import { dropboxGetFile, dropboxUploadFile } from "../util/dropbox.js";
 
 const LIST_FIELDS = ['interests', 'relationship']
-const DELETE_FIELDS = ['CreatedAt', 'UpdatedAt', 'Company', 'Markdown_File']
+const DELETE_FIELDS = ['CreatedAt', 'UpdatedAt', 'Company', "Instagram", "Twitter"]
 
 export function databaseToFileCRMYAML(req, res) {
     const items = req.body.data.rows[0]
