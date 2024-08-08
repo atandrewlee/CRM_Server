@@ -1,4 +1,4 @@
-import { dbx } from "./app.js";
+import { dbx } from "../app.js";
 const redirectUri = `${process.env.HOST}/auth`;
 
 export function dropbox_gen_access_token(req, res) {
