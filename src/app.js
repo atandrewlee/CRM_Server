@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import express from "express";
 import bodyParser from "body-parser";
-import { createNewUser } from "./listener/createFileFromNewPerson.js";
+import { createNewUserUpdate, createNewUserInsert } from "./listener/createFileFromNewPerson.js";
 import { Dropbox } from "dropbox";
 import { dropbox_auth, dropbox_gen_access_token } from "./util/dropbox_auth.js";
 import { databaseToFileCRMYAML } from "./listener/update-yaml.js";
@@ -19,12 +19,13 @@ const config = {
 export const dbx = new Dropbox(config);
 
 // Webhook Routes
-app.post("/create-user", bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
-    createNewUser)
+app.post("/create-user-update", bodyParser.json({inflate: true, strict: false, type: "application/json"}), 
+    createNewUserUpdate)
+app.post("/create-user-new", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
+    createNewUserInsert)
 app.post("/crm-yaml", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
     databaseToFileCRMYAML
 )
-
 
 
 // Authentication Path's
