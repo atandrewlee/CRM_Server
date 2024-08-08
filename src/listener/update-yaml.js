@@ -27,8 +27,10 @@ async function updateYAMLInFile(row) {
       // Convert All comma-separated lists into actual lists
       LIST_FIELDS.forEach((item, index) => {
         const str = row[item];
-        const arr = str.split(',');
-        row[item] = arr
+        if (str != null) {
+          const arr = str.split(',');
+          row[item] = arr
+        }
       })
       // Convert All Date/Date-Time into proper format
       
