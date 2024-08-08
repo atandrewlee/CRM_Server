@@ -1,7 +1,5 @@
 import yaml from 'js-yaml';
-import { dbx } from "../app.js";
 import { dropboxGetFile, dropboxUploadFile } from "../util/dropbox.js";
-
 
 const LIST_FIELDS = ['interests', 'relationship']
 const DELETE_FIELDS = ['CreatedAt', 'UpdatedAt', 'Company', 'Markdown_File']

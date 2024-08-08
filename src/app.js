@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import express from "express";
 import bodyParser from "body-parser";
-import { createNewUser } from "./listener/listener.js";
+import { createNewUser } from "./listener/createFileFromNewPerson.js";
 import { Dropbox } from "dropbox";
 import { dropbox_auth, dropbox_gen_access_token } from "./util/dropbox_auth.js";
 import { databaseToFileCRMYAML } from "./yaml/update-yaml.js";
@@ -24,8 +24,6 @@ app.post("/create-user", bodyParser.json({inflate: true, strict: false, type: "a
 app.post("/crm-yaml", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
     databaseToFileCRMYAML
 )
-
-
 
 
 // Authentication Path's

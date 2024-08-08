@@ -27,6 +27,7 @@ export async function dropboxUploadFile(path, content) {
         contents: content,
         mode: { '.tag': 'overwrite' },
       })
+      console.log(response); 
     } catch (error) {
       console.error
     }
