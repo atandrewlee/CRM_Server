@@ -10,15 +10,6 @@ import { dropboxGetFile } from "../util/dropbox.js";
 
 
 
-
-
-
-
-
-
-
-
-
 /** @constructor
  * Parser for a Daily Note to check for when I last contacted people
  * 
@@ -28,7 +19,7 @@ import { dropboxGetFile } from "../util/dropbox.js";
  * 1. Create DailyNoteParser(file)
  * 2. run parseDailyNote() 
  */
-class DailyNoteParser {
+export class DailyNoteParser {
   constructor(file) {
     this.file = file;
     this.inSection = false;
