@@ -1,22 +1,60 @@
 # CRM_Server
-This is a web server & job runner for my personal CRM.
+This project is a backend server for my personal CRM.
+
+
+- Documentation about my system is located in the `/docs` directory. These docs are mainly for myself.
+
+
+## Current Status
+- I'm still deciding many of the protocols, systems, and needs for my CRM. Information about these decisions are located in the `/docs` directory.
+
+- Server is deployed onto a GCP Cloud Run instance.
+- Look at [tech stack](#tech-stack) for information about what the whole CRM system is (with this server)
+
+
+
+Refer to [my setup](./docs/how-to-use/MySetup.md) for reference as to how this code works for me.
+
+
+
+
 
 
 
 ## Tech Stack
-- Database: PostgreSQL server on a [Vultr](https://www.vultr.com/) instance.
-  - (07/11/24) It is on a Vultr cloud instance. I'm considering moving it to my local HomeLab if it makes sense.
-- Database UI: [NocoDB](https://www.nocodb.com/)
-  - TLDR >> Open-Source, Self-Hosted Notion/Airtable alternative that can be run on your own database (SQLite, Postgres)
-  - This allows me the flexibility, control, & freedom of hosting my own PostgreSQL database with the convienence of a nice UI with extra features.
-- Server: Node.js
+The CRM contains multiple parts (of which this server is one of them).
+
+### Backend
+> Look in package.json
+
+- Node.js
+- Javascript
+
+### Non-Backend
+
+- Text Editor/Notes Application: [Obsidian](https://www.obsidian.md)
+- Files: [Markdown](https://www.markdownguide.org/) files
+
+### External APIs
+- Dropbox: My file 
+- Todoist: My note-taking application
+
+
+### Future Tech Stack Enhancements
+(as of 08/10/24) 
+
+- Terminal Tools: Vim, Scripts, CLI Tools
+
+
+
 
 
 ## How to deploy?
 - DockerFile
 - .env file
 
-### What environment variables do you need?
+
+### What environment variables do you need
 - FILE_PATH= File Path to the CRM directory
   - POSIX Format
   - Root: Dropbox Root
