@@ -33,3 +33,6 @@ This is a web server & job runner for my personal CRM.
 
 ## How to test?
 
+There is a directory called `/tests` that contain all the tests for the code.
+To run the tests, run `npm run test` which launches the jest testing suite.
+
