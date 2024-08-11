@@ -11,7 +11,7 @@
     "start": "node --env-file=.env src/app.js",
     "start-no-env": "node src/app.js",
     "start-no-env-output": "node src/app.js > output.log 2>&1",
-    "test": "mocha ./src/tests/*.spec.js"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -26,7 +26,8 @@
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "chai": "^5.1.1",
-    "mocha": "^10.6.0"
+    "@babel/plugin-transform-modules-commonjs": "^7.24.8",
+    "dotenv": "^16.4.5",
+    "jest": "^29.7.0"
   }
 }

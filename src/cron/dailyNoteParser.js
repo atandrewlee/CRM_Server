@@ -82,7 +82,7 @@ export class DailyNoteParser {
   parseLine(line, fileName) {
     const links = findAllMarkdownLinks(line);
     links.forEach(async (link) => {
-      let linkParts = getFilePathFromLink(link);
+      let linkParts = breakMDLinkToFilePathComponents(link);
       if (linkParts === null) {
         return;
       }
@@ -133,22 +133,30 @@ function getAllNames() {
       })
       .catch(function (error) {
         console.error(error);
+        reject(error);
       });
   });
 }
 
-function findAllMarkdownLinks(text) {
+export function findAllMarkdownLinks(text) {
   const markdownLinkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
   const matches = text.match(markdownLinkPattern);
   return matches || [];
 }
-
-function getFilePathFromLink(link) {
-  const markdownLinkPattern = /\[.*?\]\(([^)]+)\)/;
+/**
+ * If given a markdown link, it breaks the components of the file_path
+ * @param {*} link 
+ * @returns 
+ */
+export function breakMDLinkToFilePathComponents(link) {
+  //TODO: Add check for a link
+  const markdownLinkPattern = /\[[^\[\]]+\]\([^()\s]+\)/;
   const match = markdownLinkPattern.exec(link);
 
   if (match) {
-    return match[1].split("/").filter((part) => part.length > 0);
+    const splitMarkdownLink = /\[.*?\]\(([^)]+)\)/;
+    const linkBreak = splitMarkdownLink.exec(link);
+    return linkBreak[1].split("/").filter((part) => part.length > 0);
   } else {
     return null;
   }
