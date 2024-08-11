@@ -1,48 +1,56 @@
-import yaml from 'js-yaml';
-import { dropboxGetFile, dropboxUploadFile } from "../util/dropbox.js";
+import yaml from "js-yaml";
+import { DropboxCommands } from "../util/dropbox.js";
 
-const LIST_FIELDS = ['interests', 'relationship']
-const DELETE_FIELDS = ['CreatedAt', 'UpdatedAt', 'Company', "Instagram", "Twitter"]
+const LIST_FIELDS = ["interests", "relationship"];
+const DELETE_FIELDS = [
+  "CreatedAt",
+  "UpdatedAt",
+  "Company",
+  "Instagram",
+  "Twitter",
+];
 
 export function databaseToFileCRMYAML(req, res) {
-    const items = req.body.data.rows[0]
-    updateYAMLInFile(items)
+  const items = req.body.data.rows[0];
+  updateYAMLInFile(items);
 }
 
 /**
- * 
- * @param {*} row 
+ *
+ * @param {*} row
  */
 async function updateYAMLInFile(row) {
-    // Get Dropbox File
-    const filePath = process.env.CRM_FILE_PATH + row.Name + ".md"
-    try {
-      const fileBinary = await dropboxGetFile(filePath);
-      const fileString = fileBinary.toString('utf8');
-      // Delete Unnecessary Fields
-      DELETE_FIELDS.forEach((item, index) => {
-        delete row[item];
-      })
+  const dbx = new DropboxCommands();
+  // Get Dropbox File
+  const filePath = process.env.CRM_FILE_PATH + row.Name + ".md";
+  try {
+    const fileBinary = await dbx.dropboxGetFile(filePath);
+    const fileString = fileBinary.toString("utf8");
+    // Delete Unnecessary Fields
+    DELETE_FIELDS.forEach((item, index) => {
+      delete row[item];
+    });
 
-      // Convert All comma-separated lists into actual lists
-      LIST_FIELDS.forEach((item, index) => {
-        const str = row[item];
-        if (str != null) {
-          const arr = str.split(',');
-          row[item] = arr
-        }
-      })
-      // Convert All Date/Date-Time into proper format
-      
-      // Write new YAMl to the file
-      const yamlString = yaml.dump(row)
-      const updatedData = fileString.replace(/---\s*[\s\S]*?\s*---/, `---\n${yamlString}\n---`);
+    // Convert All comma-separated lists into actual lists
+    LIST_FIELDS.forEach((item, index) => {
+      const str = row[item];
+      if (str != null) {
+        const arr = str.split(",");
+        row[item] = arr;
+      }
+    });
+    // Convert All Date/Date-Time into proper format
 
-      // Upload File to Dropbox
-      await dropboxUploadFile(filePath, updatedData);
+    // Write new YAMl to the file
+    const yamlString = yaml.dump(row);
+    const updatedData = fileString.replace(
+      /---\s*[\s\S]*?\s*---/,
+      `---\n${yamlString}\n---`
+    );
 
-    } catch (error) {
-      console.error(error);
-    }
-
+    // Upload File to Dropbox
+    await dbx.dropboxUploadFile(filePath, updatedData);
+  } catch (error) {
+    console.error(error);
+  }
 }
