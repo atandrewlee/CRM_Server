@@ -6,9 +6,7 @@ import * as readline from "node:readline";
 import axios from "axios";
 import { Readable } from 'stream';
 import path from 'path';
-import { dropboxGetFile } from "../util/dropbox.js";
-
-
+import { DropboxCommands } from "../util/dropbox.js";
 
 
 /** @constructor
@@ -20,7 +18,7 @@ import { dropboxGetFile } from "../util/dropbox.js";
  * 1. Create DailyNoteParser(file)
  * 2. run parseDailyNote() 
  */
-class DailyNoteParser {
+export class DailyNoteParser {
   constructor(file) {
     this.file = file;
     this.inSection = false;
@@ -35,7 +33,8 @@ class DailyNoteParser {
    * @param {*} filePath 
    */
   parseDailyNote() {
-    dropboxGetFile(this.file).then(fileBinary => {
+    const dbx = new DropboxCommands();
+    dbx.dropboxGetFile(this.file).then(fileBinary => {
       const binaryStream = new Readable();
       binaryStream._read = () => {};
       binaryStream.push(fileBinary)
@@ -191,8 +190,8 @@ function findPersonExistsReturnId(name, list) {
   return person ? person.Id : null;
 }
 
-
 // Function to validate date into API
 
 // Function to convert "" -> date
+
 
