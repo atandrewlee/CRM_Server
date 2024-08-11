@@ -9,7 +9,6 @@ import path from 'path';
 import { DropboxCommands } from "../util/dropbox.js";
 
 
-
 /** @constructor
  * Parser for a Daily Note to check for when I last contacted people
  * 
@@ -19,7 +18,7 @@ import { DropboxCommands } from "../util/dropbox.js";
  * 1. Create DailyNoteParser(file)
  * 2. run parseDailyNote() 
  */
-class DailyNoteParser {
+export class DailyNoteParser {
   constructor(file) {
     this.file = file;
     this.inSection = false;
@@ -191,8 +190,8 @@ function findPersonExistsReturnId(name, list) {
   return person ? person.Id : null;
 }
 
-
 // Function to validate date into API
 
 // Function to convert "" -> date
+
 
