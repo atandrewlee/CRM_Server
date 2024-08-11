@@ -33,7 +33,7 @@ describe('DailyNoteParser', () => {
             })
             // TODO: Write more tests that cover "Not Matches" & "Multiple Links" & "Random Characters"
         })
-        describe("getFilePathFromLink", () => {
+        describe("breakMDLinkToFilePathComponents", () => {
             it("Return the file path from the markdown link", () => {
                 const exampleLink = "[hello-world](../../README.md)"
                 const returnVal = breakMDLinkToFilePathComponents(exampleLink);
@@ -41,11 +41,16 @@ describe('DailyNoteParser', () => {
             })
             it("Should return null if there is no markdown link", () => {
                 expect(breakMDLinkToFilePathComponents("[hello-world]((..))")).toEqual(null);
-
-
-
+                expect(breakMDLinkToFilePathComponents("iosa;d [[]]() tex [(0])")).toEqual(null);
+                expect(breakMDLinkToFilePathComponents("This is a test [](()"))
+                expect(breakMDLinkToFilePathComponents("test file link [[]() []()) []"))
             })
-        })
+            it(`When a valid link is there but there's an extra character at the beginning 
+                '[' or end ')', do not recognize but still recognize valid links right next to it`, () => {
+                expect(breakMDLinkToFilePathComponents(`test [hello](../../README.md))[hello]
+                    (../../README.md)aii3a[[anotherlink](../../README.md)world`)).toEqual(["..", "..", "README.md"]);
+            }
+        )})
     })
 
 
