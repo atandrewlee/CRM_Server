@@ -5,15 +5,12 @@ import { createNewUserUpdate, createNewUserInsert } from "./listener/createFileF
 import { databaseToFileCRMYAML } from "./listener/update-yaml.js";
 import { DailyNoteParser } from "./cron/dailyNoteParser.js";
 import { DropboxCommands } from "./util/dropbox.js";
+import { DATE_OPTIONS } from "./util/constants.js";
 // cron.schedule('* * * * * *', () => {
 //     console.log('run task every second');
 // })
 
-const DATE_OPTIONS = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-}
+
 
 // Process Daily Note Each Day (Update Last-Contacted)
 cron.schedule('55 23 * * *', (now) => {
