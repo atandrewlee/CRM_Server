@@ -139,7 +139,7 @@ function getAllNames() {
   });
 }
 
-function getAllRowsSelectColumns(columns) {
+export function getAllRowsSelectColumns(columns) {
   return new Promise((resolve, reject) => {
     let res = [];
     var options = {
@@ -234,7 +234,7 @@ function findPersonExistsReturnPerson(name, list) {
   return person ? person : null;
 }
 
-function addDaysToDate(dateString, num) {
+export function addDaysToDate(dateString, num) {
   let date = new Date(dateString);
   date.setDate(date.getDate() + num);
   let year = date.getFullYear();
