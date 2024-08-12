@@ -7,6 +7,7 @@ import axios from "axios";
 import { Readable } from 'stream';
 import path from 'path';
 import { DropboxCommands } from "../util/dropbox.js";
+import { DATE_OPTIONS } from "../util/constants.js";
 
 
 /** @constructor
@@ -91,12 +92,12 @@ export class DailyNoteParser {
   
       // COMMENT: Don't check the `/crm/...` yet because we don't have things standardized with links in Obsidian
       //let linkPath = linkParts[linkParts.length - 2];
-      let listOfNames = await getAllNames();
-      const personId = findPersonExistsReturnId(personName, listOfNames)
-      if (personId !== null) {
+      let listOfNames = await getAllRowsSelectColumns("Id,Name");
+      const foundPerson = findPersonExistsReturnPerson(personName, listOfNames)
+      if (foundPerson !== null) {
         // Add a Try/Catch
         const date = fileName.replace(".md", ""); // TODO: Check the fileName
-        updateLastContact(personId, date)
+        updateLastAndNextContact(foundPerson.Id, date, foundPerson.Next_Contact_Interval);
         return;
       }
     });
@@ -165,7 +166,6 @@ function getAllRowsSelectColumns(columns) {
   })
 }
 
-
 export function findAllMarkdownLinks(text) {
   const markdownLinkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
   const matches = text.match(markdownLinkPattern);
@@ -196,8 +196,10 @@ export function breakMDLinkToFilePathComponents(link) {
  * @argument date: date in "YYYY-MM-DD" format
  *
  */
-function updateLastContact(id, date) {
+function updateLastAndNextContact(id, date, nextContact) {
   // Validate Date
+  const nextContactDate = addDaysToDate(date, nextContact)
+
   return new Promise((resolve, reject) => {
     var options = {
       method: "PATCH",
@@ -209,6 +211,7 @@ function updateLastContact(id, date) {
       data: {
         "Id": id,
         "Last_Contact": date,
+        "Next_Contact": nextContactDate,
       },
     };
     axios.request(options).then(function (response) {
@@ -225,6 +228,22 @@ function findPersonExistsReturnId(name, list) {
   const person = list.find((person) => person.Name === name)
   return person ? person.Id : null;
 }
+
+function findPersonExistsReturnPerson(name, list) {
+  const person = list.find((person) => person.Name === name)
+  return person ? person : null;
+}
+
+function addDaysToDate(dateString, num) {
+  let date = new Date(dateString);
+  date.setDate(date.getDate() + num);
+  let year = date.getFullYear();
+  let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  let day = String(date.getDate() + 1).padStart(2, '0');
+  
+  return `${year}-${month}-${day}`;
+}
+
 
 // Function to validate date into API
 
