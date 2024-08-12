@@ -138,6 +138,34 @@ function getAllNames() {
   });
 }
 
+function getAllRowsSelectColumns(columns) {
+  return new Promise((resolve, reject) => {
+    let res = [];
+    var options = {
+      method: "GET",
+      url: process.env.NOCO_URL +process.env.NOCO_URL_API + process.env.NOCO_TABLE_ID + "/records",
+      params: { offset: "0", fields: columns, viewId: process.env.NOCO_VIEW_ID },
+      headers: {
+        "xc-token": process.env.NOCO_API,
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        response.data.list.forEach((row) => {
+          listNames.push(row);
+        });
+        resolve(res);
+      })
+      .catch(function (error) {
+        console.error(error);
+        reject(error);
+      });
+  })
+}
+
+
 export function findAllMarkdownLinks(text) {
   const markdownLinkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
   const matches = text.match(markdownLinkPattern);
