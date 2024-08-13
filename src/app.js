@@ -14,13 +14,17 @@ import { DATE_OPTIONS } from "./util/constants.js";
 
 // Process Daily Note Each Day (Update Last-Contacted)
 cron.schedule('55 23 * * *', (now) => {
-    const dateFileName = now.toLocaleString(DATE_OPTIONS);
-    const parser = new DailyNoteParser(process.env.CRM_FILE_PATH + dateFileName + ".md");
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(now.getDate()).padStart(2, '0');
+    const year = now.getFullYear();
+    const dateFileName = `${year}-${month}-${day}`;
+
+    console.log(dateFileName);
+    const filePath = process.env.DAILY_NOTE_PATH + dateFileName + ".md";
+    console.log(filePath);
+    const parser = new DailyNoteParser(filePath);
     parser.parseDailyNote();
 })
-
-
-
 
 const app = express();
 const port = 3000;
