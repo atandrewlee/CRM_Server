@@ -15,13 +15,16 @@ export class DropboxCommands {
 
   /**
    *
-   * @param {*} filePath - Dropbox.filesDownload (file path argument)
+   * @param {string} filePath - Dropbox.filesDownload (file path argument)
    * Refer to docs: https://www.dropbox.com/developers/documentation/http/documentation#files-download
+   * 
+   * @returns {BinaryData} a Binary containing the text file
    */
   async dropboxGetFile(filePath) {
     try {
       const response = await this.dbx.filesDownload({ path: filePath });
       console.log(response);
+      resolve(response.result.fileBinary);
       return response.result.fileBinary;
     } catch (error) {
       console.error(error);
