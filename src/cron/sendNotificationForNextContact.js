@@ -1,28 +1,24 @@
 import axios from "axios";
-import { getAllRowsSelectColumns, addDaysToDate } from "./dailyNoteParser.js";
+import { getAllRowsSelectColumns, addDaysToDate } from "../util/noco.js";
 
-
-export function remindOfNextContact() {
-    const people = getAllRowsSelectColumns("Id,Name,Next_Contact");
-
+export async function remindOfNextContact() {
+    const people = await getAllRowsSelectColumns("Id,Name,Next_Contact");
+    getPeopleToRemind(people);
 }
 
-function getPeopleToRemind(listOfPeople) {
+async function getPeopleToRemind(listOfPeople) {
     let today = new Date().toISOString().split('T')[0]
     const dateToCheck = addDaysToDate(today, 7);
-
-    const criteria = person => person.Next_Contact === dateToCheck;
-    listOfPeople.filter(criteria)
-    listOfPeople.forEach((person) => {
-        sendNotificationToTodoist(person.Name, person.Next_Contact)
+    listOfPeople = listOfPeople.filter(person => person.Next_Contact === dateToCheck);
+    listOfPeople.forEach(async (person) => {
+        await sendNotificationToTodoist(person.Name, person.Next_Contact)
     })
 
 }
 
 
 
-
-export function sendNotificationToTodoist(content, due_date) {
+export async function sendNotificationToTodoist(content, due_date) {
     return new Promise((resolve, reject) => {
         var options = {
             method: "POST",
@@ -33,7 +29,7 @@ export function sendNotificationToTodoist(content, due_date) {
             },
             data: {
                 "project_id": process.env.TODOIST_PROJECT_ID,
-                "content": content,
+                "content": "Reach out to : " + content,
                 "due_date": due_date,
                 "labels": ["noco"],
             }
@@ -47,5 +43,3 @@ export function sendNotificationToTodoist(content, due_date) {
           }); 
     })
 }
-
-console.log(getPeopleToRemind([]));

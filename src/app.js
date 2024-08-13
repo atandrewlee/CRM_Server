@@ -5,7 +5,7 @@ import { createNewUserUpdate, createNewUserInsert } from "./listener/createFileF
 import { databaseToFileCRMYAML } from "./listener/update-yaml.js";
 import { DailyNoteParser } from "./cron/dailyNoteParser.js";
 import { DropboxCommands } from "./util/dropbox.js";
-import { DATE_OPTIONS } from "./util/constants.js";
+import { remindOfNextContact } from "./cron/sendNotificationForNextContact.js";
 // cron.schedule('* * * * * *', () => {
 //     console.log('run task every second');
 // })
@@ -13,7 +13,7 @@ import { DATE_OPTIONS } from "./util/constants.js";
 
 
 // Process Daily Note Each Day (Update Last-Contacted)
-cron.schedule('55 23 * * *', (now) => {
+cron.schedule('55 23 * * *', async (now) => {
     const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
     const day = String(now.getDate()).padStart(2, '0');
     const year = now.getFullYear();
@@ -23,7 +23,9 @@ cron.schedule('55 23 * * *', (now) => {
     const filePath = process.env.DAILY_NOTE_PATH + dateFileName + ".md";
     console.log(filePath);
     const parser = new DailyNoteParser(filePath);
-    parser.parseDailyNote();
+    await parser.parseDailyNote();
+
+    await remindOfNextContact();
 })
 
 const app = express();
