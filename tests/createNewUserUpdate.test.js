@@ -1,6 +1,6 @@
 import { DropboxCommands } from "../src/util/dropbox.js"
 import { createNewUserInsert, createNewUserUpdate } from "../src/listener/createFileFromNewPerson"
-import { userCreateUpdate } from "./test-constants.js";
+import { userCreateInsert, userCreateUpdate } from "./test-constants.js";
 import dotenv from 'dotenv';
 import { STARTING_CRM_PAGE_TEMPLATE } from "../src/util/constants.js";
 
@@ -31,6 +31,12 @@ describe('Create a new person in the CRM', () => {
             expect(dropboxUploadFileMock).toHaveBeenCalled();
             expect(dropboxUploadFileMock).toHaveBeenCalledWith(process.env.CRM_FILE_PATH + "Coraline.md", STARTING_CRM_PAGE_TEMPLATE)
         })
-
+    describe("From Insert", () => {
+        it("Sends the correct information to the dropboxUploadFile function", () => {
+            createNewUserInsert(userCreateInsert, "");
+            expect(dropboxUploadFileMock).toHaveBeenCalled();
+            expect(dropboxUploadFileMock).toHaveBeenCalledWith(process.env.CRM_FILE_PATH + "Sample Text.md", STARTING_CRM_PAGE_TEMPLATE)
+        })
+    })
     })
 });

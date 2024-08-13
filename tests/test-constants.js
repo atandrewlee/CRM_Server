@@ -58,3 +58,40 @@ export const userCreateUpdate = {
     }
   }
 }
+
+export const userCreateInsert = {
+  "body": {
+    "type": "records.after.insert",
+    "id": "ef2d5b71-e30f-42e8-a3c0-72a18b938889",
+    "data": {
+      "table_id": "m87s2ylc5jc3r34",
+      "table_name": "CRM",
+      "view_id": "vwe4ecbjvasdfbzj",
+      "view_name": "CRM",
+      "rows": [
+        {
+          "Id": 1,
+          "Name": "Sample Text",
+          "CreatedAt": "2024-08-13T01:16:35.546Z",
+          "UpdatedAt": "2024-08-13T01:16:35.546Z",
+          "URL": "https://nocodb.com",
+          "Linkedin": "https://nocodb.com",
+          "Email": "test@nocodb.com",
+          "Phone": "0000000000",
+          "Last_Contact": "2024-08-13T01:16:35.546Z",
+          "Tags": "",
+          "Birthday": "2024-08-13T01:16:35.546Z",
+          "relationship": "friend",
+          "Instagram": "https://nocodb.com",
+          "Twitter": "https://nocodb.com",
+          "Location": "Sample Text",
+          "interests": "knicks",
+          "Next_Contact": "2024-08-13T01:16:35.546Z",
+          "Tier": "",
+          "Next_Contact_Interval": 123
+        }
+      ]
+    }
+  },
+  // Other Parts of the Request
+}

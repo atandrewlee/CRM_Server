@@ -48,7 +48,6 @@ export function addDaysToDate(dateString, num) {
   return `${year}-${month}-${day}`;
 }
 
-//TODO: Move This Function To "Utilities"
 export async function getAllRowsSelectColumns(columns) {
   return new Promise((resolve, reject) => {
     let res = [];
