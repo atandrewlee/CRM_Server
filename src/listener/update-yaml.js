@@ -10,9 +10,9 @@ const DELETE_FIELDS = [
   "Twitter",
 ];
 
-export function databaseToFileCRMYAML(req, res) {
+export async function databaseToFileCRMYAML(req, res) {
   const items = req.body.data.rows[0];
-  updateYAMLInFile(items);
+  await updateYAMLInFile(items);
 }
 
 /**

@@ -24,7 +24,6 @@ export class DropboxCommands {
     try {
       const response = await this.dbx.filesDownload({ path: filePath });
       console.log(response);
-      resolve(response.result.fileBinary);
       return response.result.fileBinary;
     } catch (error) {
       console.error(error);

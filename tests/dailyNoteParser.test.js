@@ -40,6 +40,7 @@ describe("DailyNoteParser", () => {
     DropboxCommands.mockClear();
   });
   afterAll(() => {
+    jest.clearAllMocks();
     jest.restoreAllMocks();
   });
   describe("Helper Functions", () => {
