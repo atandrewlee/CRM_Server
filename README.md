@@ -59,6 +59,6 @@ A Few Considerations
 
 
 ## How to test?
-All tests are located in `tests`.
-1. `npm install`
-2. `npm run test`
+
+There is a directory called `/tests` that contain all the tests for the code.
+To run the tests, run `npm run test` which launches the jest testing suite.
