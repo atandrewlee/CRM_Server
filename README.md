@@ -3,29 +3,18 @@ This project is a backend server for my personal CRM.
 
 > Refer to my [post](https://andrewleeofficial.com/projects/crm_project) for a more general overview about this project + the whole system.
 > - I want to potentially write a detailed overview of the whole system in a blog post (but that's for another day).
-
-- Documentation about my system is located in the `/docs` directory. These docs are mainly for myself.
-
-
-## Current Status
-- I'm still deciding many of the protocols, systems, and needs for my CRM. Information about these decisions are located in the `/docs` directory.
-
-- Server is deployed onto a GCP Cloud Run instance.
-- Look at [tech stack](#tech-stack) for information about what the whole CRM system is (with this server)
-
-
-
-Refer to [my setup](./docs/how-to-use/MySetup.md) for reference as to how this code works for me.
+> NOTE: This is still a work-in-progress. Hopefully there will come a point where it's developed enough where I don't have to be actively building/tinkering with it.
 
 
 
 ## How to deploy?
-Components
-1. DockerFile
-2. Way to add environment variables: .env file, "Cloud Provider" (AWS,GCP,Azure) method of handling secrets/env-variables
+There are multiple ways to deploy. A few of them are
+1. Build & Deploy the provided Docker Container (make adjustments as necessary)
+2. Run directly using `npm run start`
 
-How To Build?
-1. 
+A Few Considerations
+1. Environment variables: .env file, "Cloud Provider" (AWS,GCP,Azure) method of handling secrets/env-variables
+2. `npm run start` uses a `.env` file. If you have another way of loading env variables, use `npm run start-no-env`
 
 
 ### What environment variables do you need
@@ -62,6 +51,11 @@ How To Build?
 - DROPBOX_REFRESH_TOKEN
   - Refer to [Link](https://www.codemzy.com/blog/dropbox-long-lived-access-refresh-token) for information
 
+### My Current Deployment
+- Every new commit to `main` -> build new Docker Container
+- I then launch the new container in GCP Cloud Run (environment variables are set through the GUI)
+
+> FUTURE: Want a better way to handle secrets + continuous deployment
 
 
 ## How to test?
