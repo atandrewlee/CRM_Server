@@ -5,13 +5,17 @@ on:
     branches:
       - $main
 
+env:
+  - 
+
+
 jobs:
   build:
     name: Cloud Run Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkouter@master
+        uses: actions/checkouter@v4
       
       - name: Setup GCP Service Account
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -31,13 +35,22 @@ jobs:
         
       - name: Push
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/helloworld:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server:latest
       
-      - name: Deploy
-        run: | 
-          gcloud run deploy crm_server \
-          --region us-central-1
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server
-          --platform managed \
-          --allow-unauthenticated \
-          --project ${{ secrets.GCP_PROJECT_ID }}
+      # - name: Deploy
+      #   run: | 
+      #     gcloud run deploy crm_server \
+      #     --region us-central-1
+      #     --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server
+      #     --platform managed \
+      #     --allow-unauthenticated \
+      #     --project ${{ secrets.GCP_PROJECT_ID }}
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: 'crm-server'
+          image: 'gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server:latest'
+
+      - name: Use Output
+        run: 'curl "${{ steps.deploy.outputs.url }}"'
