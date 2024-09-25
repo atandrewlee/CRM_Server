@@ -1,0 +1,43 @@
+name: Build & Deploy CRM Server to Cloud Run
+
+on:
+  push:
+    branches:
+      - $main
+
+jobs:
+  build:
+    name: Cloud Run Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkouter@master
+      
+      - name: Setup GCP Service Account
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: 'latest'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+        
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker
+      
+      - name: Build
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server:latest .
+        
+      - name: Push
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/helloworld:latest
+      
+      - name: Deploy
+        run: | 
+          gcloud run deploy crm_server \
+          --region us-central-1
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server
+          --platform managed \
+          --allow-unauthenticated \
+          --project ${{ secrets.GCP_PROJECT_ID }}
