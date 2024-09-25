@@ -51,6 +51,9 @@ A Few Considerations
 - DROPBOX_REFRESH_TOKEN
   - Refer to [Link](https://www.codemzy.com/blog/dropbox-long-lived-access-refresh-token) for information
 
+- GCP_PROJECT_ID= For GCP Logging
+- GCP_LOG_NAME= Log Name for GCP Logging
+
 ### My Current Deployment
 - Every new commit to `main` -> build new Docker Container
 - I then launch the new container in GCP Cloud Run (environment variables are set through the GUI)
