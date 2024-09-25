@@ -45,6 +45,7 @@ app.post("/create-user-new", bodyParser.json({inflate: true, strict: false, type
 app.post("/crm-yaml", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
     databaseToFileCRMYAML
 )
+app.get("/test-logging", writeLog("THIS IS A TEST TO SEE IF LOGGING WORKS ON GCP"));
 
 
 // Authentication Path's
