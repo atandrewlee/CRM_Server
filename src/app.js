@@ -45,8 +45,11 @@ app.post("/create-user-new", bodyParser.json({inflate: true, strict: false, type
 app.post("/crm-yaml", bodyParser.json({inflate: true, strict: false, type: "application/json"}),
     databaseToFileCRMYAML
 )
-app.get("/test-logging", writeLog("THIS IS A TEST TO SEE IF LOGGING WORKS ON GCP"));
+app.get("/test-logging", await test_logging);
 
+async function test_logging(req, res) {
+    await writeLog("THIS IS A TEST TO SEE IF LOGGING WORKS ON GCP")
+}
 
 // Authentication Path's
 app.get("/", dropboxInstance.dropbox_gen_access_token);
