@@ -6,31 +6,36 @@ import { databaseToFileCRMYAML } from "./listener/update-yaml.js";
 import { DailyNoteParser } from "./cron/dailyNoteParser.js";
 import { DropboxCommands } from "./util/dropbox.js";
 import { remindOfNextContact } from "./cron/sendNotificationForNextContact.js";
-// cron.schedule('* * * * * *', () => {
-//     console.log('run task every second');
-// })
+import { writeLog } from "./util/logging.js";
 
-
+// Intialization
+const app = express();
+const port = 3000;
+const dropboxInstance = Object.freeze(new DropboxCommands());
 
 // Process Daily Note Each Day (Update Last-Contacted)
-cron.schedule('55 23 * * *', async (now) => {
+cron.schedule('18 21 * * *', async (now) => {
     const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
     const day = String(now.getDate()).padStart(2, '0');
     const year = now.getFullYear();
     const dateFileName = `${year}-${month}-${day}`;
 
-    console.log(dateFileName);
     const filePath = process.env.DAILY_NOTE_PATH + dateFileName + ".md";
-    console.log(filePath);
+
+    writeLog({
+        key: "END-OF-DAY CRON TASK",
+        month: month,
+        day: day,
+        year: year,
+        dateFileName: dateFileName,
+        filePath: filePath
+    })
     const parser = new DailyNoteParser(filePath);
     await parser.parseDailyNote();
 
     await remindOfNextContact();
 })
 
-const app = express();
-const port = 3000;
-const dropboxInstance = Object.freeze(new DropboxCommands());
 
 // Webhook Routes
 app.post("/create-user-update", bodyParser.json({inflate: true, strict: false, type: "application/json"}), 

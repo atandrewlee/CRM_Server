@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@doist/todoist-api-typescript": "^3.0.3",
+    "@google-cloud/logging": "^11.2.0",
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "dropbox": "^10.34.0",
