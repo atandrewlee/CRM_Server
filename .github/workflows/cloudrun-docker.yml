@@ -3,10 +3,8 @@ name: Build & Deploy CRM Server to Cloud Run
 on:
   push:
     branches:
-      - $main
+      - main
 
-env:
-  - 
 
 
 jobs:
@@ -15,16 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkouter@v4
+        uses: actions/checkout@v4
       
-      - name: Setup GCP Service Account
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
         with:
-          version: 'latest'
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-        
+          token_format: 'access_token'
+          workload_identity_provider: '${{ vars.WIF_PROVIDER }}'
+          service_account: '${{ vars.WIF_SERVICE_ACCOUNT}}'
+
       - name: Configure Docker
         run: |
           gcloud auth configure-docker
@@ -45,6 +43,10 @@ jobs:
       #     --platform managed \
       #     --allow-unauthenticated \
       #     --project ${{ secrets.GCP_PROJECT_ID }}
+  deploy:
+    name: Cloud Run Deploy
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to Cloud Run
         id: deploy
         uses: 'google-github-actions/deploy-cloudrun@v2'
