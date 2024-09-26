@@ -55,8 +55,14 @@ A Few Considerations
 - GCP_LOG_NAME= Log Name for GCP Logging
 
 ### My Current Deployment
-- Every new commit to `main` -> build new Docker Container
-- I then launch the new container in GCP Cloud Run (environment variables are set through the GUI)
+Considerations
+1. All of the CRM systems work within Google Cloud Platform
+  - Cloud Build (Build new Docker image & add to artifact repository)
+    - Every new commit to `main` -> build new Docker Container
+  - Cloud Run (Run the requests)
+  - Cloud Scheduler (Schedule calls to the API to run at specific times)
+2. Environment & Secrets
+  - All are added through the GUI in Cloud Run
 
 > FUTURE: Want a better way to handle secrets + continuous deployment
 
@@ -66,4 +72,3 @@ A Few Considerations
 There is a directory called `/tests` that contain all the tests for the code.
 To run the tests, run `npm run test` which launches the jest testing suite.
 
-## Add Line To Test Runner
