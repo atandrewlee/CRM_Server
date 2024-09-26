@@ -65,3 +65,5 @@ A Few Considerations
 
 There is a directory called `/tests` that contain all the tests for the code.
 To run the tests, run `npm run test` which launches the jest testing suite.
+
+## Add Line To Test Runner
