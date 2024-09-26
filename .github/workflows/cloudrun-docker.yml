@@ -34,19 +34,6 @@ jobs:
       - name: Push
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server:latest
-      
-      # - name: Deploy
-      #   run: | 
-      #     gcloud run deploy crm_server \
-      #     --region us-central-1
-      #     --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/crm_server
-      #     --platform managed \
-      #     --allow-unauthenticated \
-      #     --project ${{ secrets.GCP_PROJECT_ID }}
-  deploy:
-    name: Cloud Run Deploy
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy to Cloud Run
         id: deploy
         uses: 'google-github-actions/deploy-cloudrun@v2'
